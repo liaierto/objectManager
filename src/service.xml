@@ -2,5 +2,5 @@
  <ServiceManager name ="ServiceManager">
     <objectMetaService name="objectMetaService" class="com.liaier.service.TObjectMetaService"/>
     <objectMethodService name="objectMethodService" class="com.liaier.service.TObjectMethodService"/>
-    <objectService name="objectService" class="com.liaier.service.TObjectService"/>
+    <objectService name="objectService" class="com.liaier.service.TObjectServices"/>
   </ServiceManager>
