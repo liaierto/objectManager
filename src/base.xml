@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <ServiceManager name ="ServiceManager">
+    <object name="object" type="table">
+	     <id name="o_id" type="int" len="10" iskey="yes" aut="auto_increment" comment="主键"/>
+	     <name name="name" type="varchar" len="50" iskey="no" aut="no" comment="名称"/>
+	     <description name="description" type="varchar" len="100" iskey="no" aut="no" comment="描述"/>
+	     <type name="type" type="varchar" len="30" iskey="no" aut="no" comment="描述"/>
+	     <create_time name="create_time"  type="varchar" len="32" iskey="no" aut="no" comment="创建日期"/>
+	     <update_time name="update_time"  type="varchar" len="32" iskey="no" aut="no" comment="更新日期"/>
+	     <role name="role"  type="varchar" len="32" iskey="no" aut="no" comment="角色"/>
+    </object>
+   <meta name="meta" type="table">
+	     <id name="m_id" type="int" len="10" iskey="yes" aut="auto_increment" comment="主键"/>
+	     <name name="name" type="varchar" len="50" iskey="no" aut="no" comment="名称"/>
+	     <description name="description" type="varchar" len="100" iskey="no" aut="no" comment="描述"/>
+	     <type name="type"  type="varchar" len="10" iskey="no" aut="no" comment="类型"/>
+	     <len name="len"  type="varchar" len="20" iskey="no" aut="no" comment="长度"/>
+	     <key name="key"  type="int" len="1" iskey="no" aut="no" comment="主键"/>
+	     <object name="object" type="varchar" len="50" iskey="no" aut="no" comment="对象名称"/>
+	     <role name="role"  type="varchar" len="32" iskey="no" aut="no" comment="角色"/>
+	     <create_time name="create_time"  type="varchar" len="32" iskey="no" aut="no" comment="创建日期"/>
+	     <update_time name="update_time"  type="varchar" len="32" iskey="no" aut="no" comment="更新日期"/>
+    </meta>
+    <object_method name="object_method" type="table">
+	     <id name="om_id" type="int" len="10" iskey="yes" aut="auto_increment" comment="主键"/>
+	     <method name="method" type="varchar" len="100" iskey="no" aut="no" comment="方法名"/>
+	     <filter name="filter"  type="varchar" len="10" iskey="no" aut="no" comment="附加条件"/>
+	     <name name="name" type="varchar" len="50" iskey="no" aut="no" comment="对象名称"/>
+	     <role name="role"  type="varchar" len="32" iskey="no" aut="no" comment="角色"/>
+	     <create_time name="create_time"  type="varchar" len="32" iskey="no" aut="no" comment="创建日期"/>
+	     <update_time name="update_time"  type="varchar" len="32" iskey="no" aut="no" comment="更新日期"/>
+    </object_method>
+    <method name="method" type="table">
+	     <id name="mt_id" type="int" len="10" iskey="yes" aut="auto_increment" comment="主键"/>
+	     <method name="method" type="varchar" len="100" iskey="no" aut="no" comment="方法名"/>
+	     <create_time name="create_time"  type="varchar" len="32" iskey="no" aut="no" comment="创建日期"/>
+	     <update_time name="update_time"  type="varchar" len="32" iskey="no" aut="no" comment="更新日期"/>
+    </method>
+  </ServiceManager>
