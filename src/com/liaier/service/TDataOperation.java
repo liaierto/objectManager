@@ -81,7 +81,14 @@ public class TDataOperation extends TService implements IDataOperation {
 	            return "false";
 	        }
 	}
-
+	public String queryObjTree(String objectName,String content,String convernt) {
+		 try {
+	         return MysqlPugin.queryTree(objectName, content,convernt);
+	        } catch (Exception e) {
+	            log.error(e);
+	            return "false";
+	        }
+	}
 	public void setStatement(Statement statement){
 		   this.MysqlPugin.setDataSource(statement);
 	    }

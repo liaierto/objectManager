@@ -203,9 +203,6 @@ public class TMysqlPugin {
         	sql.append(where);
         	resultSet = mStatement.executeQuery(sql.toString());
         	
-        	if(isConvent.get("tree")!=null){
-        		queryTree(resultSet,isConvent);
-        	}
         	JSONArray rows = new JSONArray();
         	while(resultSet.next()){
         		JSONObject row = new JSONObject();
@@ -325,6 +322,96 @@ public class TMysqlPugin {
                totalPage = totalPage+1;
             }
             ret.put("totalPage", totalPage);
+            return  ret.toString();
+            
+        } catch (SQLException e) {
+            log.error(e);
+            return null;
+            
+        }finally {
+            try {
+                if (resultSet != null) {
+                	resultSet.close();
+                }
+            } catch (SQLException e) {
+                log.error(e);
+            }
+        }
+    }
+    
+    public  String queryTree(String objectName,String content,String convernt) throws Exception {
+        ResultSet         resultSet    = null;
+        JSONObject filter = null;
+        JSONObject ret = new JSONObject();
+        String fields = null;
+        try {
+        	JSONObject cont = JsonObjectTools.getJSObj(content);
+        	fields = (String) cont.get("fields");
+        	filter = JsonObjectTools.getJSObj(cont.getString("filter"));
+        	Hashtable<String,String> isConvent = new Hashtable<String,String> ();
+        	if(!"".equals(convernt)){
+        		String[] convernts = convernt.split(",");
+            	int cLen = convernts.length;
+            	for(int i=0;i<cLen;i++){
+            		String[] kv = convernts[i].split(":");
+            		isConvent.put(kv[0], kv[1]);
+            	}
+        	}
+        	
+        	StringBuffer sql = new StringBuffer("select ");
+        	sql.append(fields);
+        	sql.append(" from ");
+        	sql.append(objectName);
+        	sql.append(" where 1=1");
+        	StringBuffer where = new StringBuffer();
+        	for (Iterator itr = filter.keySet().iterator(); itr.hasNext();) {
+        		String whereName  = (String) itr.next();
+                String whereValue = (String) filter.get(whereName);
+                if(!"".equals(whereValue)){
+                	String[] values = whereValue.split(",");
+                	int vl = values.length;
+                	if(vl>1){
+                		where.append(" and ").append(whereName+" in (");
+                		for(int i=0;i<vl;i++){
+                			where.append("'"+values[i]+"'").append(",");
+                		}
+                		where = where.deleteCharAt(where.length()-1).append(")");
+                	}else{
+                		where.append(" and ").append(whereName+"='"+whereValue+"'");
+                	}
+                }
+        	}
+        	sql.append(where);
+        	resultSet = mStatement.executeQuery(sql.toString());
+        	
+        	JSONArray rows = new JSONArray();
+        	while(resultSet.next()){
+        		JSONObject row = new JSONObject();
+        		String[]  fieldsStr = fields.split(",");
+        		for(int j=0;j<fieldsStr.length;j++){
+        			String fName ="";
+        			if(fieldsStr[j].indexOf(" AS ") >0){
+        				fName = fieldsStr[j].split(" AS ")[1];
+        			}
+        			if(fieldsStr[j].indexOf(" as ") >0){
+        				fName = fieldsStr[j].split(" as ")[1];
+        			}else{
+        				fName = fieldsStr[j];
+        			}
+        			 if(resultSet.getObject(fName)!=null){
+        				 String vcode = isConvent.get(fName);
+        				 if(vcode!=null && !"".equals(vcode)){
+        					 row.put(fName,new String((byte[])resultSet.getObject(fName),vcode)); 
+        				 }else{
+        					 row.put(fName,resultSet.getObject(fName)); 
+        				 }
+                     }else{
+                    	 row.put(fName,""); 
+                     }
+        		}
+        		rows.add(row);
+        	}
+        	ret.put("rows", rows);
             return  ret.toString();
             
         } catch (SQLException e) {

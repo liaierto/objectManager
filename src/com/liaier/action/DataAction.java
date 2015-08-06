@@ -80,7 +80,17 @@ public class DataAction extends HttpServlet {
 				 resultSet.close();
 				 result = dataOperation.queryObjPage(object, parameter, filter);
 			 }
-			 
+			 if("queryObjTree".equals(methods)){
+				 JSONObject contObj = JsonObjectTools.getJSObj(parameter);
+				 String sql = "select filter from object_method,object where object.o_id=object_method.object and object.name='"+object+"' and object_method.role='"+contObj.getString("role")+"' and object_method.method='queryObjPage'";
+				 ResultSet resultSet = statement.executeQuery(sql);
+				 String filter = "";
+				 if(resultSet.next()){
+					 filter = resultSet.getString("filter");
+				 }
+				 resultSet.close();
+				 result = dataOperation.queryObjTree(object, parameter, filter);
+			 }
 			 log.info(result);
 	         response.getWriter().print(result);
 		} catch (Exception e) {
