@@ -72,10 +72,27 @@ public class TDataOperation extends TService implements IDataOperation {
 		
 			
 	}
-
+	public String queryObjLike(String objectName,String content,String convernt) {
+        try {
+        	return MysqlPugin.queryLike(objectName, content,convernt);
+        } catch (Exception e) {
+            log.error(e);
+            return "false";
+        }
+		
+			
+	}
 	public String queryObjPage(String objectName,String content,String convernt) {
 		 try {
 	         return MysqlPugin.queryPage(objectName, content,convernt);
+	        } catch (Exception e) {
+	            log.error(e);
+	            return "false";
+	        }
+	}
+	public String queryObjPageLike(String objectName,String content,String convernt) {
+		 try {
+	         return MysqlPugin.queryPageLike(objectName, content,convernt);
 	        } catch (Exception e) {
 	            log.error(e);
 	            return "false";

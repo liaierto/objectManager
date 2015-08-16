@@ -58,6 +58,10 @@ public class DataAction extends HttpServlet {
 			 if("delete".equals(methods)){
 				 result = dataOperation.delete(object, parameter);
 			 }
+			 if("delAndInsrt".equals(methods)){
+				 dataOperation.delete(object, parameter);
+				 result = dataOperation.add(object, parameter);
+			 }
 			 if("queryObj".equals(methods)){
 				 JSONObject contObj = JsonObjectTools.getJSObj(parameter);
 				 String sql = "select filter from object_method,object where object.o_id=object_method.object and object.name='"+object+"' and object_method.role='"+contObj.getString("role")+"' and object_method.method='queryObj'";
@@ -89,7 +93,19 @@ public class DataAction extends HttpServlet {
 					 filter = resultSet.getString("filter");
 				 }
 				 resultSet.close();
-				 result = dataOperation.queryObjTree(object, parameter, filter);
+				 //result = dataOperation.queryObjTree(object, parameter, filter);
+			 }
+			 
+			 if("queryObjLike".equals(methods)){
+				 JSONObject contObj = JsonObjectTools.getJSObj(parameter);
+				 String sql = "select filter from object_method,object where object.o_id=object_method.object and object.name='"+object+"' and object_method.role='"+contObj.getString("role")+"' and object_method.method='queryObjPage'";
+				 ResultSet resultSet = statement.executeQuery(sql);
+				 String filter = "";
+				 if(resultSet.next()){
+					 filter = resultSet.getString("filter");
+				 }
+				 resultSet.close();
+				 result = dataOperation.queryObjLike(object, parameter, filter);
 			 }
 			 log.info(result);
 	         response.getWriter().print(result);
