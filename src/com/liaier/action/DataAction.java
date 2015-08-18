@@ -49,6 +49,18 @@ public class DataAction extends HttpServlet {
 			 
 			 IDataOperation dataOperation  = new TDataOperation();
 			 dataOperation.setStatement(statement);
+			 if("define".equals(object)){
+				 JSONObject contObj = JsonObjectTools.getJSObj(parameter);
+				 String sql = "select filter from  object_define_method where object_define_method.role='"+contObj.getString("role")+"' and object_define_method.method='"+methods+"'";
+				 ResultSet resultSet = statement.executeQuery(sql);
+				 String filter = "";
+				 if(resultSet.next()){
+					 filter = resultSet.getString("filter");
+				 }
+				 resultSet.close();
+				 result = dataOperation.queryDefine(filter,"");
+			 
+			 }
 			 if("add".equals(methods)){
 				 result = dataOperation.add(object, parameter);
 			 }
@@ -107,6 +119,18 @@ public class DataAction extends HttpServlet {
 				 resultSet.close();
 				 result = dataOperation.queryObjLike(object, parameter, filter);
 			 }
+			 if("queryObjPageLike".equals(methods)){
+				 JSONObject contObj = JsonObjectTools.getJSObj(parameter);
+				 String sql = "select filter from object_method,object where object.o_id=object_method.object and object.name='"+object+"' and object_method.role='"+contObj.getString("role")+"' and object_method.method='queryObjPage'";
+				 ResultSet resultSet = statement.executeQuery(sql);
+				 String filter = "";
+				 if(resultSet.next()){
+					 filter = resultSet.getString("filter");
+				 }
+				 resultSet.close();
+				 result = dataOperation.queryObjPageLike(object, parameter, filter);
+			 }
+			 
 			 log.info(result);
 	         response.getWriter().print(result);
 		} catch (Exception e) {

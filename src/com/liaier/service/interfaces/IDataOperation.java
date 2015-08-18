@@ -11,5 +11,6 @@ public interface IDataOperation {
 	String queryObjLike(String objectName,String content,String convernt);
 	String queryObjPage(String objectName,String content,String convernt);
 	String queryObjPageLike(String objectName,String content,String convernt);
+	String queryDefine(String content,String convernt);
 	void setStatement(Statement statement);
 }

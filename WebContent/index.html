@@ -1,0 +1,181 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>DataTables</title>
+  <meta name="description" content="这是一个 table 页面">
+  <meta name="keywords" content="table">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <link rel="stylesheet" type="text/css"href="//cdn.bootcss.com/datatables/1.10.9/css/dataTables.bootstrap.css"/>
+  <!--[if lt IE 9]>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+    <script src="//cdn.bootcss.com/datatables/1.10.9/js/jquery.js"></script>
+    <script src="//cdn.bootcss.com/datatables/1.10.9/js/jquery.dataTables.js"></script>
+    <script src="assets/js/amazeui.min.js"></script>
+   <script src="assets/js/app.js"></script>
+   <script type="text/javascript" src="assets/json/jquery.json-2.2.js"></script>
+   <script type="text/javascript" src="assets/json/jsonpath-0.8.0.js"></script> 
+  <script>
+  $(document).ready(function() {
+      var currentPage = 1;
+      var objIns = new Object();
+  	objIns.currentpage =currentPage;
+	    objIns.pageRow     =10;
+ 	    objIns.object      ="4";
+   $('#example').DataTable( {
+        ajax: {
+            url: "BaseAction",
+            type: "POST",
+            data: {
+            	"service": "objectMetaService",
+            	"method": "queryPage", 
+            	"parameter":$.toJSON(objIns)
+	        }
+         },
+         serverSide: true,
+        columns: [
+            { "data": "m_id" },
+            { "data": "name" },
+            { "data": "description" },
+            { "data": "type" },
+            { "data": "len" },
+            { "data": "iskey" }
+        ]
+    } );
+  } );
+  </script>
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand">
+    <strong>DataTable</strong> <small>WEB,安卓通过各种API直接操作数据表</small>
+  </div>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          <span class="am-icon-users"></span> 管理员 <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+        </ul>
+      </li>
+      <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+        <li><a href="admin-table.html"><span class="am-icon-table"></span> 表管理</a></li>
+        <li><a href="admin-form.html"><span class="am-icon-pencil-square-o"></span> 通用方法管理</a></li>
+        <li><a href="#"><span class="am-icon-sign-out"></span> 自定义查询设置</a></li>
+      </ul>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 公告</p>
+          <p>时光静好，与君语；细水流年，与君同。—— Amaze UI</p>
+        </div>
+      </div>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-tag"></span> wiki</p>
+          <p>Welcome to the Amaze UI wiki!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>Table</small></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-6">
+        <div class="am-btn-toolbar">
+          <div class="am-btn-group am-btn-group-xs">
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-save"></span> 保存</button>
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <form class="am-form">
+          <table id="example" class="am-table am-table-striped am-table-hover table-main">
+            <thead>
+              <tr>
+                <th class="table-id">ID</th>
+                <th class="table-title">属性名称</th>
+                <th class="table-type">属性描述</th>
+                <th class="table-author am-hide-sm-only">类型</th>
+                <th class="table-date am-hide-sm-only">长度</th>
+                <th class="table-date am-hide-sm-only">主键</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+          <div class="am-cf">
+  共 15 条记录
+  <div class="am-fr">
+    <ul class="am-pagination">
+      <li class="am-disabled"><a href="#">«</a></li>
+      <li class="am-active"><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">»</a></li>
+    </ul>
+  </div>
+</div>
+          <hr />
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <!-- content end -->
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<footer>
+  <hr>
+  <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+</footer>
+
+</body>
+</html>

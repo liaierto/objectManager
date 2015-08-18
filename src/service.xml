@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <ServiceManager name ="ServiceManager">
-    <objectMetaService name="objectMetaService" class="com.liaier.service.TObjectMetaService"/>
+    <objectMetaService name="objectMetaService" class="com.liaier.service.TObjectMetaServiceN"/>
     <objectMethodService name="objectMethodService" class="com.liaier.service.TObjectMethodService"/>
     <objectService name="objectService" class="com.liaier.service.TObjectService"/>
   </ServiceManager>

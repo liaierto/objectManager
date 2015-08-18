@@ -32,8 +32,8 @@ public class TMysqlPugin {
                 sql.append("insert into " + objectName+"(");
         		rowData = (JSONObject) iter.next();
         		for (Iterator itr = rowData.keySet().iterator(); itr.hasNext();) {
-                    String pColumnName  = (String) itr.next();
-                    String pColumnValue = (String) rowData.get(pColumnName);
+                    String pColumnName  = itr.next().toString();
+                    String pColumnValue = rowData.get(pColumnName).toString();
                     columnNames.append(pColumnName+",");
                     values.append("'").append( pColumnValue+"'").append(",");
                 }
@@ -88,7 +88,7 @@ public class TMysqlPugin {
                 
                 rowData = (JSONObject) iter.next();
         		for (Iterator itr = rowData.keySet().iterator(); itr.hasNext();) {
-                    String columnName  = (String) itr.next();
+                    String columnName  = itr.next().toString();
                     String columnValue =  rowData.get(columnName).toString();
                     if("".equals(filter.get(columnName))){
                     	if(columnValue==null || "".equals(columnValue)){
@@ -414,7 +414,7 @@ public class TMysqlPugin {
         		rows.add(row);
         	}
         	ret.put("rows", rows);
-        	int totalRows = queryOfRows(objectName,content);
+        	int totalRows = queryOfRows(objectName,content,false);
         	int totalPage = totalRows/pageRow;
             int i         = totalRows%pageRow;
             if(i!=0){
@@ -504,7 +504,7 @@ public class TMysqlPugin {
         		rows.add(row);
         	}
         	ret.put("rows", rows);
-        	int totalRows = queryOfRows(objectName,content);
+        	int totalRows = queryOfRows(objectName,content,true);
         	int totalPage = totalRows/pageRow;
             int i         = totalRows%pageRow;
             if(i!=0){
@@ -617,7 +617,7 @@ public class TMysqlPugin {
         }
     }
     
-    public int queryOfRows(String objectName,String content) {
+    public int queryOfRows(String objectName,String content,boolean isLike) {
 		ResultSet resultSet = null;
 	    int       totalRows = 0;
 	    JSONObject filter   = null;
@@ -636,7 +636,11 @@ public class TMysqlPugin {
         		String whereName  = (String) itr.next();
                 String whereValue = (String) filter.get(whereName);
                 if(!"".equals(whereValue)){
-                	where.append(" and ").append(whereName+"="+whereValue);
+                	if(!isLike){
+                		where.append(" and ").append(whereName+"='"+whereValue+"'");
+                	}else{
+                		where.append(" and ").append(whereName+" like '%"+whereValue+"%'");
+                	}
                 }
         	}
         	sql.append(where);
@@ -684,7 +688,56 @@ public class TMysqlPugin {
     	}
     	return null;
     }
-
+    public  String queryDefine(String content,String convernt) throws Exception {
+        ResultSet         resultSet    = null;
+        JSONObject filter = null;
+        JSONObject ret = new JSONObject();
+        String fields = null;
+        try {
+        	int start = content.indexOf("select");
+        	int end   = content.indexOf("from");
+        	fields = content.substring(start, end);
+        	resultSet = mStatement.executeQuery(content);
+        	
+        	JSONArray rows = new JSONArray();
+        	while(resultSet.next()){
+        		JSONObject row = new JSONObject();
+        		String[]  fieldsStr = fields.split(",");
+        		for(int j=0;j<fieldsStr.length;j++){
+        			String fName ="";
+        			if(fieldsStr[j].indexOf(" AS ") >0){
+        				fName = fieldsStr[j].split(" AS ")[1].trim();
+        			}
+        			if(fieldsStr[j].indexOf(" as ") >0){
+        				fName = fieldsStr[j].split(" as ")[1].trim();
+        			}else{
+        				fName = fieldsStr[j].trim();
+        			}
+        			 if(resultSet.getObject(fName)!=null){
+        			    row.put(fName,resultSet.getObject(fName)); 
+                     }else{
+                    	 row.put(fName,""); 
+                     }
+        		}
+        		rows.add(row);
+        	}
+        	ret.put("rows", rows);
+            return  ret.toString();
+            
+        } catch (SQLException e) {
+            log.error(e);
+            return null;
+            
+        }finally {
+            try {
+                if (resultSet != null) {
+                	resultSet.close();
+                }
+            } catch (SQLException e) {
+                log.error(e);
+            }
+        }
+    }
     public void setDataSource(Statement statement) {
         this.mStatement = statement;
      }

@@ -109,4 +109,13 @@ public class TDataOperation extends TService implements IDataOperation {
 	public void setStatement(Statement statement){
 		   this.MysqlPugin.setDataSource(statement);
 	    }
+
+	public String queryDefine(String content, String convernt) {
+		try {
+	         return MysqlPugin.queryDefine(content, convernt);
+	        } catch (Exception e) {
+	            log.error(e);
+	            return "false";
+	        }
+	}
 }
